@@ -1,0 +1,17 @@
+<%= form_for(subcategory) :action=>'createSubCategory', :controller: 'categories' do |f| %>
+
+  <div class="well" style="background-color:#F7F7F7">
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <span>Parent Category is</span>
+    </div>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+  </div>
+
+<% end %>

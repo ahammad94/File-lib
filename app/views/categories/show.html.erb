@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+<div class="well" style='background-color:#F7F7F7'>
+  <p>
+    <strong>Name:</strong>
+    <%= @category.name %>
+  </p>
+</div>
+<h4>Below are the subcategories</h4>
+<div class="well" style='background-color:#F7F7F7'>
+  <% @subcategories.each do |subcat| %>
+    <p>
+      <%= subcat.name %>
+    </p>
+  <% end %>
+</div>
+
+
+<%= link_to 'Edit', :action=>'edit', :controller=>'categories', :data=>(@category) %> |
+<%= link_to 'Back', :action=>'index', :controller=>'categories' %>

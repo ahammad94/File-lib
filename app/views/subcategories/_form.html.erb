@@ -1,0 +1,29 @@
+<%= form_for subcategory, {:action=>:create, :controller=>:subcategories, :category=>(@category)} do |f| %>
+  <% if subcategory.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(subcategory.errors.count, "error") %> prohibited this subcategory from being saved:</h2>
+
+      <ul>
+      <% subcategory.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="well" style="background-color:#F7F7F7">
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+      <%= f.hidden_field :category_id, value: @category.id %>
+    </div>
+
+    <div class="field">
+      <span>Parent Category will be:</span><%= @category.name %>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,27 @@
+<%= form_for(aggregate) do |f| %>
+  <% if aggregate.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(aggregate.errors.count, "error") %> prohibited this aggregate from being saved:</h2>
+
+      <ul>
+      <% aggregate.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :file_name %>
+    <%= f.text_field :file_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :file_type %>
+    <%= f.text_field :file_type %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

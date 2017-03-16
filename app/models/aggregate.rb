@@ -1,0 +1,2 @@
+class Aggregate < ApplicationRecord
+end

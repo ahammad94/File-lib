@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>File name:</strong>
+  <%= @aggregate.file_name %>
+</p>
+
+<p>
+  <strong>File type:</strong>
+  <%= @aggregate.file_type %>
+</p>
+
+<%= link_to 'Edit', edit_aggregate_path(@aggregate) %> |
+<%= link_to 'Back', aggregates_path %>

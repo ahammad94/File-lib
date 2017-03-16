@@ -1,0 +1,32 @@
+<div class="container">
+
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h3>Here's all your categories</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <% @categories.each do |category| %>
+                  <tr>
+                    <td><%= category.name %></td>
+                    <td style="background-color:grey"><%= link_to 'Show', category %></td>
+                    <td style="background-color:grey"><%= link_to 'Create Sub-Category', {:action=>'new', :controller=>'subcategories',:category =>(category.id)} %></td>
+                    <td style="background-color:grey"><%= link_to 'Edit', edit_category_path(category) %></td>
+                    <td style="background-color:grey"><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+<%= link_to 'New Category', new_category_path %>
