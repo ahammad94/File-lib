@@ -1,19 +1,33 @@
 <p id="notice"><%= notice %></p>
-<div class="well" style='background-color:#F7F7F7'>
-  <p>
-    <strong>Name:</strong>
-    <%= @category.name %>
-  </p>
-</div>
-<h4>Below are the subcategories</h4>
-<div class="well" style='background-color:#F7F7F7'>
-  <% @subcategories.each do |subcat| %>
-    <p>
-      <%= subcat.name %>
-    </p>
-  <% end %>
+<div class="container-fluid">
+  <div class="row">
+      <div class="col-sm-12">
+        <h4>Category:</h4>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="well">
+        <p>
+          <strong>Name:</strong>
+          <%= @category.name %>
+        </p>
+      </div>
+      <h4>Below are the subcategories</h4>
+      <div class="well">
+        <%= link_to 'Create Sub-Category', {:action=>'new', :controller=>'subcategories',:category =>(@category.id)},:class=>"btn btn-success", :style=>"margin-bottom:2%" %>
+        <% @subcategories.each do |subcat| %>
+          <p>
+            <%= subcat.name %>
+            <td><%= link_to 'Edit', edit_subcategory_path(subcat),:class=>"btn btn-sm btn-info" %></td>
+            <td><%= link_to 'Delete', subcat, method: :delete, data: { confirm: 'Are you sure?' },:class=>"btn btn-sm btn-danger" %></td>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 
-<%= link_to 'Edit', :action=>'edit', :controller=>'categories', :data=>(@category) %> |
-<%= link_to 'Back', :action=>'index', :controller=>'categories' %>
+<%= link_to 'Back', :action=>'index', :controller=>'categories', :class=>"btn btn-default"%>

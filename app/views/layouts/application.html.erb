@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>DataAgrregator</title>
+    <title>File Lib</title>
     <%= csrf_meta_tags %>
      <!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -36,12 +36,13 @@
             <li>
             	<%= link_to 'Search',:action=>"search", :controller=>"aggregates"%>
             </li>
+            <li>
+            	<%= link_to 'File Explorer',:action=>"explore", :controller=>"aggregates",:path=>"home"%>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
 
-            <li><%= link_to 'Add File +',new_aggregate_path%></li>
-            <li><a href="http://builtwithbootstrap.com/" target="_blank">Share File</a></li>
-
+      
           </ul>
 
         </div>

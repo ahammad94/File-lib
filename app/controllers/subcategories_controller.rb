@@ -20,6 +20,7 @@ class SubcategoriesController < ApplicationController
 
   # GET /subcategories/1/edit
   def edit
+    @category = Category.find(@subcategory.category)
   end
 
   # POST /subcategories
@@ -55,9 +56,10 @@ class SubcategoriesController < ApplicationController
   # DELETE /subcategories/1
   # DELETE /subcategories/1.json
   def destroy
+    @category = @subcategory.category
     @subcategory.destroy
     respond_to do |format|
-      format.html { redirect_to subcategories_url, notice: 'Subcategory was successfully destroyed.' }
+      format.html { redirect_to @category, notice: 'Subcategory was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

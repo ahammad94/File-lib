@@ -3,4 +3,4 @@
 <%= render 'form', subcategory: @subcategory %>
 
 <%= link_to 'Show', @subcategory %> |
-<%= link_to 'Back', subcategories_path %>
+<%= link_to 'Back', {:action=>:show, :controller=>:categories, :id=>(@category.id)} %>

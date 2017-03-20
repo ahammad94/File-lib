@@ -10,13 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170315195901) do
+ActiveRecord::Schema.define(version: 20170318020937) do
 
   create_table "aggregates", force: :cascade do |t|
     t.string   "file_name"
-    t.string   "file_type"
+    t.string   "file"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "file_type"
+  end
+
+  create_table "aggregates_categories", id: false, force: :cascade do |t|
+    t.integer "aggregate_id", null: false
+    t.integer "category_id",  null: false
+    t.index ["aggregate_id", "category_id"], name: "index_aggregates_categories_on_aggregate_id_and_category_id"
   end
 
   create_table "categories", force: :cascade do |t|

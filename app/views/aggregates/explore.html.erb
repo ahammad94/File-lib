@@ -1,0 +1,69 @@
+<div class="container-fluid">
+    <div class="row">
+      <%= link_to "Back",:action=>:explore, :controller=>:aggregates, :path=>@back %>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="breadcrumb">
+            <%for i in 0..@path[:path_array].length-1 do%>
+            <%if i == @path[:path_array].length - 1%>
+              <li class="active">
+            <%else%>
+              <li>
+            <%end%>
+              <%= link_to @path[:path_array][i], :action=>:explore, :contoller=>:aggregates, :path=>@path[:path_array][0..i].join('/') %>
+            </li>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <h4>Folders</h4>
+
+        <div class="bs-component">
+              <table class="table table-striped table-hover" style="height:100%; overflow-y:scroll">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Folder Name</th>
+                    <th>Next Layer</th>
+                  </tr>
+                </thead>
+                <%@folders.each do |folder|%>
+                <tbody>
+                  <tr class="active">
+                    <td><%= image_tag "/images/folder_icon.png", style:"height:50px; width:50px"%></td>
+                    <td><h5><%= link_to folder[:name], :action=>:explore, :controller=>:aggregates, :path=>folder[:path] %></h5></td>
+                    <td><h6>Folders:<%=folder[:folder_count]%>|Files:<%=folder[:file_count]%></h6></td>
+                  </tr>
+                </tbody>
+                <%end%>
+              </table>
+            <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div></div>
+      </div>
+      <div class="col-sm-6">
+        <h4>Files</h4>
+
+        <div class="bs-component">
+              <table class="table table-striped table-hover" style="height:100%; overflow-y:scroll">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>File Name</th>
+                    <th>File type</th>
+                  </tr>
+                </thead>
+                <%@files.each do |file|%>
+                <tbody>
+                  <tr class="active">
+                    <td><%= image_tag "/images/file_icon.png", style:"height:50px; width:50px"%></td>
+                    <td><h5><%= link_to file[:name], :action=>:new, :controller=>:aggregates, :aggregate=>{:file_name=>File.basename(file[:path]), :file=>file[:path], :file_type=>file[:type]}%></td>
+                    <td><h6><%= file[:type] %></h6></td>
+                  </tr>
+                </tbody>
+                <%end%>
+              </table>
+            <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div></div>
+      </div>
+    </div>
+</div>

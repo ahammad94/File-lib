@@ -1,14 +1,16 @@
 <p id="notice"><%= notice %></p>
+<div class="jumbotron" style="padding:5%">
+                <h2><%= @aggregate.file_name %></h2>
 
-<p>
-  <strong>File name:</strong>
-  <%= @aggregate.file_name %>
-</p>
+                <p>
+                  File path:
+                  <em><%= @aggregate.file %></em>
+                </p>
+                <p>
+                  File type:
+                  <%= @aggregate.file_type %>
+                </p>
 
-<p>
-  <strong>File type:</strong>
-  <%= @aggregate.file_type %>
-</p>
-
-<%= link_to 'Edit', edit_aggregate_path(@aggregate) %> |
-<%= link_to 'Back', aggregates_path %>
+                <%= link_to 'Edit', edit_aggregate_path(@aggregate), :class=>"btn btn-info" %> |
+                <%= link_to 'Back', aggregates_path, :class=>"btn btn-success" %>
+</div>

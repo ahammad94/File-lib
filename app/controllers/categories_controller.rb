@@ -18,11 +18,6 @@ class CategoriesController < ApplicationController
     @category = Category.new
   end
 
-  def newSubCategory
-    @subCategory = Subcategory.new
-    @category = Category.find(params[:category])
-  end
-
   # GET /categories/1/edit
   def edit
   end
@@ -53,16 +48,25 @@ class CategoriesController < ApplicationController
   # PATCH/PUT /categories/1
   # PATCH/PUT /categories/1.json
   def update
-    respond_to do |format|
-      if @category.update(category_params)
-        format.html { redirect_to @category, notice: 'Category was successfully updated.' }
-        format.json { render :show, status: :ok, location: @category }
+      @category.errors.clear()
+      @inDatabase = Category.find_by('name': category_params[:name])
+      if @inDatabase == nil
+        respond_to do |format|
+          if @category.update(category_params)
+            format.html { redirect_to @category, notice: 'Category was successfully updated.' }
+            format.json { render :show, status: :ok, location: @category }
+          else
+            format.html { render :edit }
+            format.json { render json: @category.errors, status: :unprocessable_entity }
+          end
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @category.errors, status: :unprocessable_entity }
+        @category.errors.add(:name, :blank,message: "is a Duplicate")
+        respond_to do |format|
+          format.html { render :edit }
+        end
       end
     end
-  end
 
   # DELETE /categories/1
   # DELETE /categories/1.json
