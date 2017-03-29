@@ -18,12 +18,14 @@
     </div>
 
     <div class="field">
-      <span>Parent Category:</span><%= @category.name %>
+      <span style="color:black">Parent Category: </span>
+      <%= link_to @category.name, @category, :class=>"btn btn-xs btn-success" %></td>
     </div>
 
   </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit%>
   </div>
 <% end %>
+

@@ -16,7 +16,9 @@
                           <tbody>
                             <% @categories.each do |category| %>
                               <tr class="active">
-                                <td><%= category.name %></td>
+                                <td><%= category.name %>
+                                   <span class="badge"><%= category.aggregates.size%> Files</span>
+                                   </td>
                                 <td><%= link_to 'Show', category, :class=>"btn btn-xs btn-success" %></td>
                                 <td><%= link_to 'Edit', edit_category_path(category),:class=>"btn btn-xs btn-info" %></td>
                                 <td><%= link_to 'Delete', category, method: :delete, data: { confirm: 'Are you sure?' }, :class=>"btn btn-xs btn-danger" %></td>

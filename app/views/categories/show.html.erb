@@ -16,13 +16,15 @@
       <h4>Below are the subcategories</h4>
       <div class="well">
         <%= link_to 'Create Sub-Category', {:action=>'new', :controller=>'subcategories',:category =>(@category.id)},:class=>"btn btn-success", :style=>"margin-bottom:2%" %>
-        <% @subcategories.each do |subcat| %>
-          <p>
-            <%= subcat.name %>
-            <td><%= link_to 'Edit', edit_subcategory_path(subcat),:class=>"btn btn-sm btn-info" %></td>
-            <td><%= link_to 'Delete', subcat, method: :delete, data: { confirm: 'Are you sure?' },:class=>"btn btn-sm btn-danger" %></td>
-          </p>
-        <% end %>
+        <blockquote>
+          <% @subcategories.each do |subcat| %>
+            <p>
+              <td><%= subcat.name %></td>
+              <td><%= link_to 'Edit', edit_subcategory_path(subcat),:class=>"btn btn-sm btn-info" %></td>
+              <td><%= link_to 'Delete', subcat, method: :delete, data: { confirm: 'Are you sure?' },:class=>"btn btn-sm btn-danger" %></td>
+            </p>
+          <% end %>
+        </blockquote>
       </div>
     </div>
   </div>

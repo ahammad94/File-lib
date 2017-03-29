@@ -1,3 +1,4 @@
+<div class="well">
 <%= form_for(aggregate) do |f| %>
   <% if aggregate.errors.any? %>
     <div id="error_explanation">
@@ -10,23 +11,44 @@
       </ul>
     </div>
   <% end %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-1">
+            <%= f.label :file, :hidden=>:hidden%>
+          </div>
+          <div class="col-sm-11">
+            <%= f.text_field :file, :style=>"width:100%; background-color:grey", :hidden=>:hidden%>
+          </div>
+        </div>
+        <div class="row" style="margin-top:2%">
+          <div class="col-sm-1">
+            <%= f.label :file_name %>
+          </div>
+          <div class="col-sm-11">
+            <%= f.text_field :file_name %>
+          </div>
+        </div>
 
-  <div class="field">
-    <%= f.label :file %>
-    <%= f.text_field :file %>
+        <div class="row">
+           <div class="col-sm-1">
+            <%= f.label :file_type, :hidden=>:hidden%>
+          </div>
+          <div class="col-sm-11">
+            <%= f.text_field :file_type, :style=>" background-color:grey" ,:hidden=>:hidden%>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <%= f.submit %>
+          </div>
+        </div>  
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :file_name %>
-    <%= f.text_field :file_name %>
-  </div>
+  <% end %>
+</div>
 
-  <div class="field">
-    <%= f.label :file_type %>
-    <%= f.text_field :file_type %>
-  </div>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>

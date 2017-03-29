@@ -4,7 +4,19 @@ class AggregatesController < ApplicationController
   # GET /aggregates
   # GET /aggregates.json
   def index
-    @aggregates = Aggregate.all
+    if(params[:orderby] == nil)
+
+      @orderby = 'created_at'
+
+    else
+
+      @orderby=params[:orderby]
+
+    end
+    
+    @categories = Category.all
+    @aggregates = Aggregate.order('LOWER('+ @orderby + ')')
+    
   end
 
   def download
@@ -40,6 +52,59 @@ class AggregatesController < ApplicationController
   # GET /aggregates/1
   # GET /aggregates/1.json
   def show
+    @subcategories = Array.new
+    @filecategories = @aggregate.categories
+    @filesubcategories = @aggregate.subcategories
+    @categories = Category.all
+    for cat in @filecategories
+      for subcat in cat.subcategories
+        if !@filesubcategories.include?(subcat) 
+          @subcategories.push(subcat)
+        end
+      end
+    end
+  end
+
+  def add_category
+    @aggregate = Aggregate.find(aggregate_category_params[:aggregate_id])
+    @category = Category.find(aggregate_category_params[:category_id])
+    @aggregate.categories << @category
+    respond_to do |format|
+      if(@aggregate.save)
+        format.html { redirect_to @aggregate, notice: 'Category was successfully added' }
+      else
+        format.html { redirect_to @aggregate, notice: 'Category could not be added' }
+      end
+    end
+  end
+
+  def add_subcategory
+    @aggregate = Aggregate.find(aggregate_subcategory_params[:aggregate_id])
+    @subcategory = Subcategory.find(aggregate_subcategory_params[:subcategory_id])
+    @aggregate.subcategories << @subcategory
+    respond_to do |format|
+      if(@aggregate.save)
+        format.html { redirect_to @aggregate, notice: 'Subcategory was successfully added' }
+      else
+        format.html { redirect_to @aggregate, notice: 'Subategory could not be added' }
+      end
+    end
+  end
+
+  def remove_category
+    @aggregate = Aggregate.find(aggregate_category_params[:aggregate_id])
+    @category = Category.find(aggregate_category_params[:category_id])
+    @aggregate.categories.delete(@category)
+    for subcat in @category.subcategories
+      @aggregate.subcategories.delete(subcat)
+    end
+    respond_to do |format|
+      if(@aggregate.save)
+        format.html { redirect_to @aggregate, notice: 'Category was successfully removed' }
+      else
+        format.html { redirect_to @aggregate, notice: 'Category could not be removed' }
+      end
+    end
   end
 
   def search
@@ -115,6 +180,14 @@ class AggregatesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def aggregate_params
       params.require(:aggregate).permit(:file_name, :file, :file_type)
+    end
+
+    def aggregate_category_params
+      params.require(:aggregate_category).permit(:aggregate_id, :category_id)
+    end
+
+    def aggregate_subcategory_params
+      params.require(:aggregate_category).permit(:aggregate_id, :subcategory_id)
     end
 
     def file_counter(path)

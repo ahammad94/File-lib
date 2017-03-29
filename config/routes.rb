@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get "aggregates/remove_subcategory", to: "aggregates#remove_subcategory"
+  get "aggregates/add_subcategory", to: "aggregates#add_subcategory"
+  get "aggregates/remove_category", to: "aggregates#remove_category"
+  get "aggregates/add_category", to: "aggregates#add_category"
   get "aggregates/search", to: "aggregates#search"
   get "aggregates/download", to: "aggregates#download"
   get "aggregates/explore", to: "aggregates#explore"

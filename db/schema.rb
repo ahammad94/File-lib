@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170318020937) do
+ActiveRecord::Schema.define(version: 20170327194316) do
 
   create_table "aggregates", force: :cascade do |t|
     t.string   "file_name"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 20170318020937) do
     t.integer "aggregate_id", null: false
     t.integer "category_id",  null: false
     t.index ["aggregate_id", "category_id"], name: "index_aggregates_categories_on_aggregate_id_and_category_id"
+  end
+
+  create_table "aggregates_subcategories", id: false, force: :cascade do |t|
+    t.integer "aggregate_id",   null: false
+    t.integer "subcategory_id", null: false
+    t.index ["aggregate_id", "subcategory_id"], name: "index_aggregates_subcategories_on_agg_sub_id"
+  end
+
+  create_table "aggregates_subcategories_tables", force: :cascade do |t|
   end
 
   create_table "categories", force: :cascade do |t|

@@ -10,7 +10,7 @@
             <%else%>
               <li>
             <%end%>
-              <%= link_to @path[:path_array][i], :action=>:explore, :contoller=>:aggregates, :path=>@path[:path_array][0..i].join('/') %>
+              <%= link_to @path[:path_array][i], {:action=>:explore, :contoller=>:aggregates, :path=>@path[:path_array][0..i].join('/')}, :class=>"btn btn-success btn-sm"%>
             </li>
             <% end %>
           </div>
@@ -34,7 +34,7 @@
                   <tr class="active">
                     <td><%= image_tag "/images/folder_icon.png", style:"height:50px; width:50px"%></td>
                     <td><h5><%= link_to folder[:name], :action=>:explore, :controller=>:aggregates, :path=>folder[:path] %></h5></td>
-                    <td><h6>Folders:<%=folder[:folder_count]%>|Files:<%=folder[:file_count]%></h6></td>
+                    <td><h6>Folders <span class="badge"><%=folder[:folder_count]%></span> Files <span class="badge"><%=folder[:file_count]%></span></h6></td>
                   </tr>
                 </tbody>
                 <%end%>

@@ -1,16 +1,132 @@
 <p id="notice"><%= notice %></p>
 <div class="jumbotron" style="padding:5%">
-                <h2><%= @aggregate.file_name %></h2>
+                <h3><%= @aggregate.file_name %></h3>
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-sm-7">
+                      <blockquote>
 
-                <p>
-                  File path:
-                  <em><%= @aggregate.file %></em>
-                </p>
-                <p>
-                  File type:
-                  <%= @aggregate.file_type %>
-                </p>
-
+                          <p>
+                            <h4><span style="color:black">File path: </span><em><%= @aggregate.file %></em></h4>
+                          </p>
+                          <p>
+                            <h4><span style="color:black">File type: </span><%= @aggregate.file_type %></h4>
+                          </p>
+                          <p>
+                            <h4><span style="color:black">Created on: </span><%= @aggregate.created_at.strftime("%m-%d-%Y at %I:%M%p") %></h4>
+                          </p>
+                          <p>
+                            <h4><span style="color:black">Last modified on: </span><%= @aggregate.updated_at.strftime("%m-%d-%Y at %I:%M%p") %></h4>
+                          </p>
+                      </blockquote>
+                    </div>
+                    <div class="col-sm-5">
+                      <div class="row" style="border:thin dashed grey; margin-bottom:3%; padding:2%; border-radius:5%">
+                        <p>
+                          <h4>File Categories <div class="badge" style="background:black"> categories: <%=@filecategories.size()%> </div></h4>
+                        </p>
+                        <p>
+                          <% @filecategories.each do |category| %>
+                            <%= link_to category.name, {:action=>:remove_category, :controller=>:aggregates, :aggregate_category=>{:aggregate_id=>(@aggregate.id), :category_id=>(category.id)} }, :class=>"btn btn-danger btn-sm", :style=>"margin-bottom:2%"%>
+                          <% end %>
+                        </p> 
+                        <p>
+                          <h4>File SubCategories <div class="badge" style="background:black"> subcategories: <%=@filesubcategories.size()%></div></h4>
+                        </p>
+                        <p>
+                          <% @filesubcategories.each do |category| %>
+                            <%= link_to category.name, {:action=>:remove_category, :controller=>:aggregates, :aggregate_category=>{:aggregate_id=>(@aggregate.id), :category_id=>(category.id)} }, :class=>"btn btn-success btn-sm" ,:style=>"margin-bottom:2%"%>
+                          <% end %>
+                        </p> 
+                        
+                      </div> 
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#categoryModal" style="font-size:medium">Categroy +</button>
+                        </div>
+                        <div class="col-sm-6">
+                          <button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#subcategoryModal" style="font-size:medium" >Subcategroy +</button>
+                        </div>
+                      </div>   
+                    </div>  
+                  </div>
+                </div>
+                
                 <%= link_to 'Edit', edit_aggregate_path(@aggregate), :class=>"btn btn-info" %> |
                 <%= link_to 'Back', aggregates_path, :class=>"btn btn-success" %>
 </div>
+
+
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="categoryModal" role="dialog">
+                      <div class="modal-dialog modal-sm">
+                      
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Add a new category to this file</h4>
+                          </div>
+                          <div class="modal-body">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col-sm-12">
+                                  <h4> All Categories</h4>
+                                  <%@categories.each do |category|%>
+                                  <%if !@filecategories.include?(category)%>
+                                  <%= link_to category.name, {:action=>:add_category, :controller=>:aggregates,
+                                    :aggregate_category=>{:aggregate_id=>(@aggregate.id), :category_id=>(category.id)} }, :class=>"btn btn-success btn-sm", :style=>"margin-bottom:2%" %>
+                                    <%end%>
+                                  <%end%>
+                                </div>
+                
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                    
+                  </div>
+
+                  <div class="modal fade" id="subcategoryModal" role="dialog">
+                      <div class="modal-dialog modal-lg">
+                      
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Add a sub category from assoicated categories</h4>
+                          </div>
+                          <div class="modal-body">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col-sm-12">
+                                  <h4> SubCategories</h4>
+                                  <%@subcategories.each do |subcategory|%>
+                                    <%= link_to subcategory.name, {:action=>:add_subcategory, :controller=>:aggregates,
+                                    :aggregate_category=>{:aggregate_id=>(@aggregate.id), :subcategory_id=>(subcategory.id)} }, :class=>"btn btn-success btn-sm", :style=>"margin-bottom:2%" %>
+                                  <%end%>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                    
+                  </div>
+
+
+
+
+
+
+                  

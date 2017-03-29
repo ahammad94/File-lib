@@ -1,0 +1,28 @@
+<%= form_for :query, {:action=>:search, :controller=>:aggregates, :method=>:post} do |f| %>
+    <div class="field">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-2">
+            <%= f.label :name %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.text_field :name %>
+          </div>
+          <div class="col-sm-2">
+            <%= f.label :categories %>
+          </div>
+          <div class="col-sm-4">
+            <%= 
+              f.collection_select :name,@categories,:id,:name,{:prompt=>false},{:multiple=>true}
+            %>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+
+  <div class="actions">
+    <%= f.submit%>
+  </div>
+<% end %>
+
