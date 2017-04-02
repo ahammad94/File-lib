@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170327194316) do
+ActiveRecord::Schema.define(version: 20170329034057) do
 
   create_table "aggregates", force: :cascade do |t|
     t.string   "file_name"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20170327194316) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "file_type"
+    t.string   "guid"
   end
 
   create_table "aggregates_categories", id: false, force: :cascade do |t|

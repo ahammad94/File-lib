@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  post "aggregates/create_folder", to: "aggregates#create_folder"
+  get "aggregates/search", to: "aggregates#search"
   get "aggregates/remove_subcategory", to: "aggregates#remove_subcategory"
   get "aggregates/add_subcategory", to: "aggregates#add_subcategory"
   get "aggregates/remove_category", to: "aggregates#remove_category"
@@ -9,6 +11,6 @@ Rails.application.routes.draw do
   resources :subcategories
   resources :aggregates
   resources :categories
-  root 'aggregates#index'
+  root 'aggregates#index' 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

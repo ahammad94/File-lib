@@ -108,7 +108,19 @@ class AggregatesController < ApplicationController
   end
 
   def search
+    @orderby = 'created_at'
+
+    sql = "
+    Select aggregates.* 
+    from aggregates, aggregates_categories, categories
+    where aggregates.id = aggregates_categories.aggregate_id
+    AND categories.id = aggregates_categories.category_id
+    AND aggregates.file_name like '%%'"
+    @aggregates = Aggregate.find_by_sql(sql)
     @categories = Category.all
+    respond_to do |format|
+      format.html { render :index }
+    end 
   end
 
   # GET /aggregates/new
@@ -135,6 +147,7 @@ class AggregatesController < ApplicationController
     @aggregate.file = @path
     @aggregate.file_type = @type
     @aggregate.file_name = @name
+    @aggregate.guid = SecureRandom.uuid
 
     respond_to do |format|
       if @aggregate.save
@@ -143,6 +156,21 @@ class AggregatesController < ApplicationController
       else
         format.html { render :new }
         format.json { render json: @aggregate.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def create_folder
+    @aggregate = Aggregate.new
+    @aggregate.file = 'local'
+    @aggregate.file_name= folder_params[:name]
+    @aggregate.file_type = 'folder'
+    @aggregate.guid = SecureRandom.uuid
+    respond_to do |format|
+      if @aggregate.save
+        format.html { redirect_to @aggregate, notice: 'Aggregate was successfully created.' }
+      else
+        format.html { render :index }
       end
     end
   end
@@ -188,6 +216,10 @@ class AggregatesController < ApplicationController
 
     def aggregate_subcategory_params
       params.require(:aggregate_category).permit(:aggregate_id, :subcategory_id)
+    end
+
+    def folder_params
+      params.require(:folder).permit(:name)
     end
 
     def file_counter(path)
