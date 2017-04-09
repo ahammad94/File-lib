@@ -5,14 +5,18 @@
         <div class="row">
           <div class="col-sm-12">
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                       <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#folder">Add Folder</button>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                       
-                    <%=link_to "Add File", {:action=>:explore, :controller=>:aggregates, :path=>"home"}, :class=>"btn btn-default btn-lg btn-block" %>
+                    <%=link_to "Add Local File", {:action=>:explore, :controller=>:aggregates, :path=>"home"}, :class=>"btn btn-default btn-lg btn-block" %>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
+
+                      <%=link_to "Add Online File", {:action=>:newOnline, :controller=>:aggregates}, :class=>"btn btn-default btn-lg btn-block" %>
+                    </div>
+                    <div class="col-sm-3">
                       <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#myModal">Search</button>
                     </div>
 
@@ -70,7 +74,7 @@
                           <th colspan="3">Actions</th>
                         </tr>
                       </thead>
-                        <tbody>
+                        <tbody id="aggregates">
                           <% @aggregates.each do |aggregate| %>
                             <tr class="active" >
                               <%if aggregate.file_type == 'folder' %>
@@ -78,15 +82,23 @@
                               <%else%>
                                 <td><%= image_tag "/images/file_icon.png", style:"height:25px; width:25px"%></td>
                               <%end%>
-                                <td><%= aggregate.file_name %></td>
+                                <td><%= link_to aggregate.file_name, aggregate, :class=>"btn btn-xs btn-default"  %></td>
                                 <% 
                                 if( aggregate.file_type != 'folder' )
                                   tempArray = aggregate.file.split("/")
                                   folderPath = tempArray[0..tempArray.size()-2].join("/")
                                   file=tempArray[tempArray.size()-1]
                                 %>
-                                  <td><%= link_to folderPath, {:action=>:explore, :contoller=>:aggregates, :path=>folderPath}, :style=>"color:yellow"%>/<%=file%></td>
-                                <%else%>
+                                  <td>
+                                    <%selectedFolderPath = "" %>
+                                    <% folderPath.split("/").each do |dir| %>
+                                        <%if dir != nil && dir!="" %>
+                                            <%selectedFolderPath = selectedFolderPath + "/" + dir %>
+                                            <span class="badge" style="background-color: seagreen"><%= link_to dir, {:action=>:explore, :contoller=>:aggregates, :path=>selectedFolderPath},:style=>"color:white"%></span> /
+                                        <%end%>
+                                    <%end%><%=file%>
+                                  </td>
+                               <%else%>
                                   <td></td>
                                 <%end%>
                                 <td><span class="badge"><%= aggregate.categories.size %> categories</span></td>
@@ -94,7 +106,6 @@
                                 <td><%= aggregate.created_at.strftime("%m-%d-%Y %I:%M%p")%></td>
 
                                 <td><%= aggregate.updated_at.strftime("%m-%d-%Y %I:%M%p")%></td>
-                                <td><%= link_to 'Show', aggregate, :class=>"btn btn-xs btn-success" %></td>
                                 <td><%= link_to 'Edit', edit_aggregate_path(aggregate), :class=>"btn btn-xs btn-info" %></td>
                                 <td><%= link_to 'Delete', aggregate, method: :delete, :class=>"btn btn-xs btn-danger" ,data: { confirm: 'Are you sure?' } %></td>
                                 </tr>
@@ -102,11 +113,7 @@
                           <% end %>
                         </tbody>
                   </table>
-                  <script type="text/javascript">
 
-  $('tbody').sortable();
-
-</script>
                 </div>
                 </div>
 

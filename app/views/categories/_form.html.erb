@@ -30,7 +30,8 @@
             </tbody>
       </table>
       <div class="actions">
-        <%= f.submit %>
+        <%= f.submit  %>
+        <%= link_to 'Cancel', {:action=>'index', :controller=>'categories'}, :class=>'btn btn-default btn-xs' %>
       </div>
       <% end %>
     </div>

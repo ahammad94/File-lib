@@ -10,13 +10,13 @@
                             <h4><span style="color:black">File path: </span><em><%= @aggregate.file %></em></h4>
                           </p>
                           <p>
-                            <h4><span style="color:black">File type: </span><%= @aggregate.file_type %></h4>
+                            <h4><span style="color:black">File type: </span><span style="background-color: darkslategray" class="badge"><%= @aggregate.file_type %></span></h4>
                           </p>
                           <p>
-                            <h4><span style="color:black">Created on: </span><%= @aggregate.created_at.strftime("%m-%d-%Y at %I:%M%p") %></h4>
+                            <h4><span style="color:black">Created on: </span><span style="background-color: seagreen" class="badge"><%= @aggregate.created_at.strftime("%m-%d-%Y at %I:%M%p") %></span></h4>
                           </p>
                           <p>
-                            <h4><span style="color:black">Last modified on: </span><%= @aggregate.updated_at.strftime("%m-%d-%Y at %I:%M%p") %></h4>
+                            <h4><span style="color:black">Last modified on: </span><span style="background-color: seagreen" class="badge"><%= @aggregate.updated_at.strftime("%m-%d-%Y at %I:%M%p") %></span></h4>
                           </p>
                       </blockquote>
                     </div>
@@ -60,7 +60,7 @@
                     
                     <!-- Modal -->
                     <div class="modal fade" id="categoryModal" role="dialog">
-                      <div class="modal-dialog modal-sm">
+                      <div class="modal-dialog modal-lg">
                       
                         <!-- Modal content-->
                         <div class="modal-content">
@@ -72,7 +72,6 @@
                             <div class="container-fluid">
                               <div class="row">
                                 <div class="col-sm-12">
-                                  <h4> All Categories</h4>
                                   <%@categories.each do |category|%>
                                   <%if !@filecategories.include?(category)%>
                                   <%= link_to category.name, {:action=>:add_category, :controller=>:aggregates,
@@ -106,7 +105,6 @@
                             <div class="container-fluid">
                               <div class="row">
                                 <div class="col-sm-12">
-                                  <h4> SubCategories</h4>
                                   <%@subcategories.each do |subcategory|%>
                                     <%= link_to subcategory.name, {:action=>:add_subcategory, :controller=>:aggregates,
                                     :aggregate_category=>{:aggregate_id=>(@aggregate.id), :subcategory_id=>(subcategory.id)} }, :class=>"btn btn-success btn-sm", :style=>"margin-bottom:2%" %>

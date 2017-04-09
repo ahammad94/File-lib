@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "aggregates/newOnline", to: "aggregates#newOnline"
+  post "aggregates/parse_online", to: "aggregates#parse_online"
   post "aggregates/create_folder", to: "aggregates#create_folder"
   get "aggregates/search", to: "aggregates#search"
   get "aggregates/remove_subcategory", to: "aggregates#remove_subcategory"

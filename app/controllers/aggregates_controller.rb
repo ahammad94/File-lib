@@ -19,10 +19,9 @@ class AggregatesController < ApplicationController
     
   end
 
-  def download
-    send_file(@aggregate.file ,
-      :type => @aggregate.file_type,
-      :disposition => 'attachment')
+  def parse_online
+    page = Nokogiri::HTML(open(params[:online_aggregate][:file]))
+    puts page
   end
 
   def explore

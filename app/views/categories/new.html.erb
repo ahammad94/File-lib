@@ -1,5 +1,12 @@
-<h1>New Category</h1>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>New Category</h1>
+    </div>
+  </div>
+  <div class="row">
+    <%= render 'form', category: @category, notice: notice %>
+  </div>
+</div>
 
-<%= render 'form', category: @category, notice: notice %>
 
-<%= link_to 'Back', :action=>'index', :controller=>'categories' %>

@@ -7,6 +7,12 @@ class CategoriesController < ApplicationController
     @categories = Category.all
   end
 
+  def testIndex
+
+    @omarCat = Category.all
+
+  end
+
   # GET /categories/1
   # GET /categories/1.json
   def show

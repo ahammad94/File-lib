@@ -2,29 +2,49 @@
 <div class="container-fluid">
   <div class="row">
       <div class="col-sm-12">
-        <h4>Category:</h4>
+        <h2>Category</h2>
       </div>
   </div>
   <div class="row">
     <div class="col-sm-12">
       <div class="well">
-        <p>
-          <strong>Name:</strong>
-          <%= @category.name %>
-        </p>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-2 col-sm-6">
+              <strong>Name:</strong>
+              <%= @category.name %>
+            </div>
+            <div class="col-lg-2 col-sm-6">
+              <span class="badge">
+                <strong>Files:</strong><%= @category.aggregates.size %>
+              </span>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <h4>Below are the subcategories</h4>
+      <%= link_to 'Create Sub-Category', {:action=>'new', :controller=>'subcategories',:category =>(@category.id)},:class=>"btn btn-default", :style=>"margin-bottom:1%" %>
+      <%= link_to 'Back', {:action=>'index', :controller=>'categories'}, :class=>"btn btn-default", :style=>"margin-bottom:1%"%>
       <div class="well">
-        <%= link_to 'Create Sub-Category', {:action=>'new', :controller=>'subcategories',:category =>(@category.id)},:class=>"btn btn-success", :style=>"margin-bottom:2%" %>
-        <blockquote>
+        <div class="container-fluid">
           <% @subcategories.each do |subcat| %>
-            <p>
-              <td><%= subcat.name %></td>
-              <td><%= link_to 'Edit', edit_subcategory_path(subcat),:class=>"btn btn-sm btn-info" %></td>
-              <td><%= link_to 'Delete', subcat, method: :delete, data: { confirm: 'Are you sure?' },:class=>"btn btn-sm btn-danger" %></td>
-            </p>
+              <div class="row">
+                <div class="col-sm-12">
+                  <td><%= link_to 'X', subcat, method: :delete, data: { confirm: 'Are you sure?' },:class=>"btn btn-sm btn-danger" %></td>
+                  <%= link_to subcat.name, edit_subcategory_path(subcat),:class=>"btn btn-sm btn-info" %>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 5px">
+                <div class="col-sm-4">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow=<%=subcat.aggregates.size*100.0/@category.aggregates.size %> aria-valuemin="0" aria-valuemax="100" style="width: <%=subcat.aggregates.size*100.0/@category.aggregates.size %>%">
+                      <%=subcat.aggregates.size%> / <%= @category.aggregates.size%> Files <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
           <% end %>
-        </blockquote>
+        </div>
       </div>
     </div>
   </div>
@@ -32,4 +52,3 @@
 </div>
 
 
-<%= link_to 'Back', :action=>'index', :controller=>'categories', :class=>"btn btn-default"%>

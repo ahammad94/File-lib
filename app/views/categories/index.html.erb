@@ -3,23 +3,24 @@
       <div class="page-header" id="banner">
         <div class="row">
           <div class="col-lg-8 col-md-7 col-sm-6">
-            <h3>Here's all your categories</h3>
+            <h3>Here's all your categories <%= link_to 'New Category', new_category_path , :class=>"btn btn-primary btn-xs"%>
+            </h3>
             <div class="col-sm-10">
               <div class="bs-component">
                     <table class="table table-striped table-hover" style="height:100%; overflow-y:scroll">
                         <thead>
                           <tr>
                             <th>Name</th>
-                            <th colspan="3">Actions</th>
+                            <th>Number of Files</th>
+                            <th colspan="2">Actions</th>
                           </tr>
                         </thead>
                           <tbody>
                             <% @categories.each do |category| %>
                               <tr class="active">
-                                <td><%= category.name %>
-                                   <span class="badge"><%= category.aggregates.size%> Files</span>
+                                <td><%= link_to category.name,  category, :class=>"btn btn-xs btn-default"  %>
                                    </td>
-                                <td><%= link_to 'Show', category, :class=>"btn btn-xs btn-success" %></td>
+                                <td><span class="badge"><%= category.aggregates.size%> Files</span></td>
                                 <td><%= link_to 'Edit', edit_category_path(category),:class=>"btn btn-xs btn-info" %></td>
                                 <td><%= link_to 'Delete', category, method: :delete, data: { confirm: 'Are you sure?' }, :class=>"btn btn-xs btn-danger" %></td>
                               </tr>
@@ -33,5 +34,3 @@
     </div>
 </div>
 
-
-<%= link_to 'New Category', new_category_path %>
