@@ -1,28 +1,35 @@
-<%= form_for :query,:url => url_for(:action=>'create_folder', :controller=>'aggregates'), :method=>:get do |f| %>
-    <div class="field">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-sm-2">
-            <%= f.label :name %>
-          </div>
-          <div class="col-sm-4">
-            <%= f.text_field :name %>
-          </div>
-          <div class="col-sm-2">
-            <%= f.label :categories %>
-          </div>
-          <div class="col-sm-4">
-            <%= 
-              f.collection_select :name,@categories,:id,:name,{:prompt=>false},{:multiple=>true}
-            %>
-          </div>
-        </div>
-      </div>
-    
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3">
+      <label for="name">Name</label>
     </div>
-
-  <div class="actions">
-    <%= f.submit%>
+    <div class="col-sm-3">
+      <input type="text" id="name" placeholder="Contains" style="width: 100%">
+    </div>
   </div>
-<% end %>
+  <div class="row">
+    <div class="col-sm-3">
+      <label for="categories">Categories</label>
+    </div>
+    <div class="col-sm-9">
+      <input type="text" id="categories" placeholder="Enter categories separated by commas" style="width: 100%">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <label for="categories">Sub Categories</label>
+    </div>
+    <div class="col-sm-9">
+      <input type="text" id="categories" placeholder="Enter SubCategories separated by commas" style="width: 100%">
+    </div>
+  </div>
+</div>
+
+<script>
+    $( document ).ready(function() {
+
+    });
+
+</script>
+
 

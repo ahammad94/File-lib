@@ -7,7 +7,24 @@
                       <blockquote>
 
                           <p>
-                            <h4><span style="color:black">File path: </span><em><%= @aggregate.file %></em></h4>
+                            <h4><span style="color:black">File path: </span>
+                              <em>
+
+                                <%
+                                  selectedFolderPath = ""
+                                  file_path = @aggregate.file.split("/")
+                                  file = file_path[file_path.size-1]
+                                  file_path = file_path[0..file_path.size-2]
+                                %>
+                                <% file_path.each do |dir| %>
+                                    <%if dir != nil && dir!="" %>
+                                        <%selectedFolderPath = selectedFolderPath + "/" + dir %>
+                                        <span class="badge" style="background-color: dodgerblue"><%= link_to dir, {:action=>:explore, :contoller=>:aggregates, :path=>selectedFolderPath},:style=>"color:white"%></span> /
+                                    <%end%>
+                                <%end%>
+                                <span class="badge" style="background-color: grey"><%= file %></span>
+                              </em>
+                            </h4>
                           </p>
                           <p>
                             <h4><span style="color:black">File type: </span><span style="background-color: darkslategray" class="badge"><%= @aggregate.file_type %></span></h4>
@@ -35,7 +52,7 @@
                         </p>
                         <p>
                           <% @filesubcategories.each do |category| %>
-                            <%= link_to category.name, {:action=>:remove_category, :controller=>:aggregates, :aggregate_category=>{:aggregate_id=>(@aggregate.id), :category_id=>(category.id)} }, :class=>"btn btn-success btn-sm" ,:style=>"margin-bottom:2%"%>
+                            <%= link_to category.name, {:action=>:remove_subcategory, :controller=>:aggregates, :aggregate_category=>{:aggregate_id=>(@aggregate.id), :subcategory_id=>(category.id)} }, :class=>"btn btn-success btn-sm" ,:style=>"margin-bottom:2%"%>
                           <% end %>
                         </p> 
                         

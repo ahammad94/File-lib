@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170329034057) do
+ActiveRecord::Schema.define(version: 20170410040721) do
 
   create_table "aggregates", force: :cascade do |t|
     t.string   "file_name"
@@ -40,6 +40,16 @@ ActiveRecord::Schema.define(version: 20170329034057) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "folder_contents", force: :cascade do |t|
+    t.integer  "aggregate_id"
+    t.integer  "content_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["aggregate_id", "content_id"], name: "index_folder_contents_on_aggregate_id_and_content_id", unique: true
+    t.index ["aggregate_id"], name: "index_folder_contents_on_aggregate_id"
+    t.index ["content_id"], name: "index_folder_contents_on_content_id"
   end
 
   create_table "subcategories", force: :cascade do |t|

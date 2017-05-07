@@ -6,7 +6,7 @@
           <div class="col-sm-12">
                   <div class="row">
                     <div class="col-sm-3">
-                      <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#folder">Add Folder</button>
+                      <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#folder">Add Folder <span class="glyphicon glyphicon-folder-open"></span></button>
                     </div>
                     <div class="col-sm-3">
                       
@@ -15,9 +15,10 @@
                     <div class="col-sm-3">
 
                       <%=link_to "Add Online File", {:action=>:newOnline, :controller=>:aggregates}, :class=>"btn btn-default btn-lg btn-block" %>
+
                     </div>
                     <div class="col-sm-3">
-                      <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#myModal">Search</button>
+                      <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#myModal">Search <span class=" glyphicon glyphicon-search"></span></button>
                     </div>
 
                   </div>
@@ -26,13 +27,20 @@
                   <table class="table table-striped table-hover">
                       <thead>
                         <tr>
-
                           <th></th>
                           <%if @orderby == "file_name"%>
                             <th class="text-info">File name</th>
                           <%else%>
                             <th><%= link_to "File name",
                            :action=>:index, :controller=>:aggregates, :orderby=>"file_name"%></th>
+                          <%end%>
+
+                          <%if @orderby == "file_type"%>
+                              <th class="text-info">File Type</th>
+                          <%else%>
+                              <th><%= link_to "File type",
+                                              :action=>:index, :controller=>:aggregates,
+                                              :orderby=>"file_type"%></th>
                           <%end%>
 
                           <%if @orderby =="file"%>
@@ -45,13 +53,6 @@
 
                           <th>Categories</th>
 
-                          <%if @orderby == "file_type"%>
-                            <th class="text-info">File Type</th>
-                          <%else%>
-                            <th><%= link_to "File type",
-                             :action=>:index, :controller=>:aggregates,
-                             :orderby=>"file_type"%></th>
-                          <%end%>
 
 
                           <%if @orderby == "created_at"%>
@@ -70,8 +71,6 @@
                              :orderby=>"updated_at"%></th>
                           <%end%>
 
-
-                          <th colspan="3">Actions</th>
                         </tr>
                       </thead>
                         <tbody id="aggregates">
@@ -82,8 +81,17 @@
                               <%else%>
                                 <td><%= image_tag "/images/file_icon.png", style:"height:25px; width:25px"%></td>
                               <%end%>
-                                <td><%= link_to aggregate.file_name, aggregate, :class=>"btn btn-xs btn-default"  %></td>
-                                <% 
+                              <td>
+                                <%= link_to aggregate.file_name, aggregate, :class=>"btn btn-xs btn-default", :style=>"margin:1%" %><br />
+                                <%= link_to edit_aggregate_path(aggregate), :class=>"btn btn-xs btn-info" do %>
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                <%end%>
+                                <%= link_to aggregate, method: :delete, :class=>"btn btn-xs btn-danger" ,data: { confirm: 'Are you sure?' } do %>
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                <%end%>
+                              </td>
+                              <td><span class="badge" style="background-color: lightseagreen"><%= aggregate.file_type %></span></td>
+                                <%
                                 if( aggregate.file_type != 'folder' )
                                   tempArray = aggregate.file.split("/")
                                   folderPath = tempArray[0..tempArray.size()-2].join("/")
@@ -94,21 +102,22 @@
                                     <% folderPath.split("/").each do |dir| %>
                                         <%if dir != nil && dir!="" %>
                                             <%selectedFolderPath = selectedFolderPath + "/" + dir %>
-                                            <span class="badge" style="background-color: seagreen"><%= link_to dir, {:action=>:explore, :contoller=>:aggregates, :path=>selectedFolderPath},:style=>"color:white"%></span> /
+                                            <span class="badge" style="background-color: dodgerblue"><%= link_to dir, {:action=>:explore, :contoller=>:aggregates, :path=>selectedFolderPath},:style=>"color:white"%></span> /
                                         <%end%>
-                                    <%end%><%=file%>
+                                    <%end%>
+                                    <span class="badge" style="background-color: grey"><%=file%></span>
                                   </td>
                                <%else%>
                                   <td></td>
                                 <%end%>
-                                <td><span class="badge"><%= aggregate.categories.size %> categories</span></td>
-                                <td><%= aggregate.file_type %></td>
-                                <td><%= aggregate.created_at.strftime("%m-%d-%Y %I:%M%p")%></td>
+                                <td>
+                                    <span class="badge" style="background-color: seagreen"><%=aggregate.categories.size%> categories</span>
+                                    <span class="badge" style="background-color: mediumseagreen"><%=aggregate.subcategories.size%> Subcategories</span>
+                                </td>
+                                <td><span class="badge" style="background-color: darkred"><%= aggregate.created_at.strftime("%m-%d-%Y")%></span><span class="badge" style="background-color: indianred"><%= aggregate.created_at.strftime("%I:%M %p")%></span></td>
 
-                                <td><%= aggregate.updated_at.strftime("%m-%d-%Y %I:%M%p")%></td>
-                                <td><%= link_to 'Edit', edit_aggregate_path(aggregate), :class=>"btn btn-xs btn-info" %></td>
-                                <td><%= link_to 'Delete', aggregate, method: :delete, :class=>"btn btn-xs btn-danger" ,data: { confirm: 'Are you sure?' } %></td>
-                                </tr>
+                                <td><span class="badge" style="background-color: darkred"><%= aggregate.updated_at.strftime("%m-%d-%Y")%></span><span class="badge" style="background-color: indianred"><%= aggregate.updated_at.strftime("%I:%M %p")%></span></td>
+                                 </tr>
                               
                           <% end %>
                         </tbody>
@@ -168,4 +177,7 @@
         </div>
     </div>
 </div>
+
+
+
 

@@ -20,8 +20,9 @@ class AggregatesController < ApplicationController
   end
 
   def parse_online
-    page = Nokogiri::HTML(open(params[:online_aggregate][:file]))
-    puts page
+    @page = Nokogiri::XML(open(params[:online_aggregate][:file]))
+    @page.traverse {|node| p node['V']}
+
   end
 
   def explore
@@ -106,9 +107,22 @@ class AggregatesController < ApplicationController
     end
   end
 
+  def remove_subcategory
+    @aggregate = Aggregate.find(aggregate_subcategory_params[:aggregate_id])
+    @subcategory = Subcategory.find(aggregate_subcategory_params[:subcategory_id])
+    @aggregate.subcategories.delete(@subcategory)
+
+    respond_to do |format|
+      if(@aggregate.save)
+        format.html { redirect_to @aggregate, notice: 'Subcategory was successfully removed' }
+      else
+        format.html { redirect_to @aggregate, notice: 'SubCategory could not be removed' }
+      end
+    end
+  end
+
   def search
     @orderby = 'created_at'
-
     sql = "
     Select aggregates.* 
     from aggregates, aggregates_categories, categories
@@ -130,6 +144,10 @@ class AggregatesController < ApplicationController
       @aggregate.file = aggregate_params[:file]
       @aggregate.file_type = aggregate_params[:file_type]
     end
+  end
+
+  def newOnline
+    @aggregate = Aggregate.new
   end
 
   # GET /aggregates/1/edit
@@ -213,6 +231,7 @@ class AggregatesController < ApplicationController
       params.require(:aggregate_category).permit(:aggregate_id, :category_id)
     end
 
+
     def aggregate_subcategory_params
       params.require(:aggregate_category).permit(:aggregate_id, :subcategory_id)
     end
@@ -243,4 +262,5 @@ class AggregatesController < ApplicationController
       end
       folder_count
     end
+
 end
