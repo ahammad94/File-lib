@@ -1,35 +1,114 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-3">
-      <label for="name">Name</label>
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Search Parameters</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <%= form_for :search, :url => url_for(:action=>'search', :controller=>'aggregates'), :method=>:get do |f| %>
+            <div class="row">
+                <div class="col-sm-3">
+                  <label for="name">Name</label>
+                </div>
+                <div class="col-sm-3">
+                  <input type="text" name="name" placeholder="Enter categories separated by commas" style="width: 100%">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <label for="categories">Categories</label>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" name="categories" placeholder="Enter categories separated by commas" style="width: 100%">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <label for="categories">Sub Categories</label>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" name="Sub categories" placeholder="Enter SubCategories separated by commas" style="width: 100%">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <label for="categories">Path Contains</label>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" name="path" placeholder="Enter Path Partial" style="width: 100%">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <label for="dateCreated">Date Created After</label>
+                </div>
+                <div class="col-sm-9">
+                  <input type="date" name="dateCreated">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <label for="dateModified">Modified After</label>
+                </div>
+                <div class="col-sm-9">
+                  <input type="date" name="dateModified">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <label for="dateModified">State</label>
+                </div>
+                <div class="col-sm-3">
+                  <select name="type">
+                    <option value="either">either</option>
+                    <option value="file">file</option>
+                    <option value="folder">folder</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <select name="stack">
+                    <option value="inside">Inside a folder</option>
+                    <option value="notInside">Not inside a folder</option>
+                  </select>
+                </div>
+              </div>
+              <div class="actions">
+                <%= f.submit "Search"%>
+              </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
-    <div class="col-sm-3">
-      <input type="text" id="name" placeholder="Contains" style="width: 100%">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-3">
-      <label for="categories">Categories</label>
-    </div>
-    <div class="col-sm-9">
-      <input type="text" id="categories" placeholder="Enter categories separated by commas" style="width: 100%">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-3">
-      <label for="categories">Sub Categories</label>
-    </div>
-    <div class="col-sm-9">
-      <input type="text" id="categories" placeholder="Enter SubCategories separated by commas" style="width: 100%">
-    </div>
+
   </div>
 </div>
 
+
+
 <script>
     $( document ).ready(function() {
+        $('#searchButton').click(function () {
+            var params = '';
+            var dataType = 'html';
+            $.ajax({
+                type:'GET',
+                url:'/categories',
+                data: {},
+                dataType: 'html',
+                success:function(){
+                    //I assume you want to do something on controller action execution success?
+                }
+            });
+        });
 
-    });
-
+    })
 </script>
 
 

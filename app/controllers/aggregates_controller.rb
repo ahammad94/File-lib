@@ -121,19 +121,105 @@ class AggregatesController < ApplicationController
     end
   end
 
-  def search
-    @orderby = 'created_at'
-    sql = "
-    Select aggregates.* 
-    from aggregates, aggregates_categories, categories
-    where aggregates.id = aggregates_categories.aggregate_id
-    AND categories.id = aggregates_categories.category_id
-    AND aggregates.file_name like '%%'"
-    @aggregates = Aggregate.find_by_sql(sql)
-    @categories = Category.all
+  def openFolder
+    @aggregates = Aggregate.all
     respond_to do |format|
+      #Render the index View
       format.html { render :index }
-    end 
+    end
+  end
+
+  #Function used to search through aggregates based on many GET parameters provided through forms
+  #[GET AGGREGATES/SEARCH/PARAMS]
+  def search
+
+    #Set the default order by as created at
+    @orderby = 'created_at'
+
+    #Grab all the search params
+    name = params['name']
+    path=params['path']
+    type=params['type']
+    categories = params['categories']
+    categories = categories.split(',')
+    subcategories = params['Sub categories']
+    subcategories = subcategories.split(',')
+    categoryQueryArray=""
+    subcategoryQueryArray=""
+
+    #Construct the categories Query
+    categories.each do |category|
+      categoryQueryArray+="categories.name LIKE '%"+category+"%' OR "
+    end
+
+    #Construct the Subcategories Query
+    subcategories.each do |subcategory|
+      subcategoryQueryArray+="subcategories.name LIKE '%"+subcategory+"%' OR "
+    end
+
+    #Remove the extra OR at the end of the String array
+    categoryQueryArray = categoryQueryArray.chomp(" OR ")
+    subcategoryQueryArray = subcategoryQueryArray.chomp(" OR ")
+
+    #Select statement for the query
+    select = "select distinct aggregates.*"
+
+    #from statement for the query. This depends on more factors like if categories have been selected or not
+    #The aggregates Table is always used
+    from = " FROM aggregates"
+    #Check if any categories or subcategories are queried
+    if(categories.count !=0 || subcategories.count!=0)
+      from+=", aggregates_categories, categories"
+      #If Subcategoires then grab that table as well
+      if(subcategories.count!=0)
+        from+=", subcategories, aggregates_subcategories"
+      end
+    end
+
+    #Building the conditionals. Always query on name even if empty. If empty all aggregates would be returned
+    where = " WHERE aggregates.file_name like '%"+ name +"%'"
+    where +=" AND aggregates.file like '%"+path+"%'"
+
+    #Check if any categories or subcategories are queried
+    if(categories.count !=0 || subcategories.count!=0)
+      #Join the tables correctly
+      where+=" AND aggregates.id = aggregates_categories.aggregate_id"
+      where+=" AND categories.id = aggregates_categories.category_id"
+      #If categories was queried then add condition
+      if(categories.count !=0 )
+        #Make sure only rows with correct categories are pulled
+        where+=" AND ("+ categoryQueryArray+")"
+      end
+      #If Subcategoires was queried then add condition
+      if(subcategories.count != 0)
+        where+=" AND categories.id = subcategories.category_id"
+        where+=" AND ("+ subcategoryQueryArray+")"
+        where+=" AND aggregates_subcategories.aggregate_id = aggregates.id"
+        where+=" AND aggregates_subcategories.subcategory_id = subcategories.id"
+      end
+    end
+
+    #Check the type requested by the user
+    if type == "folder"
+      where+=" AND aggregates.file_type == 'folder'"
+    elsif type == "file"
+      where+=" AND aggregates.file_type != 'folder'"
+    end
+
+
+    #Append the sql query together
+    sql = select+from+where
+    puts sql
+
+
+    #Use the SQL Query to find all relevant aggregates for the index to load
+    @aggregates = Aggregate.find_by_sql(sql)
+
+    respond_to do |format|
+      #Render the index View
+      format.html { render :index }
+    end
+
   end
 
   # GET /aggregates/new

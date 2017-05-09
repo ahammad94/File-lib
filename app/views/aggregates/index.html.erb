@@ -83,6 +83,11 @@
                               <%end%>
                               <td>
                                 <%= link_to aggregate.file_name, aggregate, :class=>"btn btn-xs btn-default", :style=>"margin:1%" %><br />
+                                <% if aggregate.file_type == 'folder' %>
+                                  <%= link_to edit_aggregate_path(aggregate), :class=>"btn btn-xs btn-success" do %>
+                                      <span>Open Folder</span>
+                                  <%end%>
+                                <%end%>
                                 <%= link_to edit_aggregate_path(aggregate), :class=>"btn btn-xs btn-info" do %>
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 <%end%>
@@ -132,25 +137,8 @@
                     
                     
                     <!-- Modal -->
-                    <div class="modal fade" id="myModal" role="dialog">
-                      <div class="modal-dialog modal-lg">
-                      
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Search Parameters</h4>
-                          </div>
-                          <div class="modal-body">
-                            <%= render 'formSearch', categories: @categories %>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          </div>
-                        </div>
-                        
-                      </div>
-                    </div>
+                    <%= render 'formSearch', categories: @categories %>
+
                    
                 <!-- -->
                 <div class="modal fade" id="folder" role="dialog">

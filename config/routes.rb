@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "aggregates/openFolder", to:"aggregates#openFolder"
   get "aggregates/newOnline", to: "aggregates#newOnline"
   post "aggregates/parse_online", to: "aggregates#parse_online"
   post "aggregates/create_folder", to: "aggregates#create_folder"
