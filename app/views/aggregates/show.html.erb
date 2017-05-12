@@ -9,7 +9,7 @@
                           <p>
                             <h4><span style="color:black">File path: </span>
                               <em>
-
+                                <%if @aggregate.file_type != "webpage"%>
                                 <%
                                   selectedFolderPath = ""
                                   file_path = @aggregate.file.split("/")
@@ -23,6 +23,9 @@
                                     <%end%>
                                 <%end%>
                                 <span class="badge" style="background-color: grey"><%= file %></span>
+                                <%else%>
+                                <a href="<%=@aggregate.file %>" class="badge" target="_blank" style="background-color: dodgerblue"><%=@aggregate.file %></a>
+                                <%end%>
                               </em>
                             </h4>
                           </p>

@@ -17,8 +17,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-4">
-          <button class="btn btn-danger btn-lg btn-block"> Bulk Load </button>
+        <div class="col-sm-offset-6 col-sm-6">
+          <%= link_to "Bulk Load Files Below", {:action=>:bulkLoad, :contoller=>:aggregates, :path=>@path[:full_path]}, :class=>"btn btn-danger btn-lg btn-block"%>
         </div>
       </div>
     <div class="row">

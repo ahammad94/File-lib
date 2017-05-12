@@ -34,8 +34,38 @@ class AggregatesController < ApplicationController
   end
 
   def parse_online
-    @page = Nokogiri::XML(open(params[:online_aggregate][:file]))
-    @page.traverse {|node| p node['V']}
+    @page = Nokogiri::XML(open(params["file"]))
+    type = "webpage"
+    path = params["file"]
+    name = @page.css("title").inner_html
+    if name == ""
+      name = path
+    end
+    file = Aggregate.new
+    file.file_name = name
+    file.file = path
+    file.file_type = type
+    file.save
+    @aggregate = file
+    @subcategories = Array.new
+    @filecategories = @aggregate.categories
+    @filesubcategories = @aggregate.subcategories
+    @categories = Category.all
+    for cat in @filecategories
+      for subcat in cat.subcategories
+        if !@filesubcategories.include?(subcat)
+          @subcategories.push(subcat)
+        end
+      end
+    end
+    respond_to do |format|
+      #Render the index View
+      format.html { render :show }
+    end
+
+
+
+
 
   end
 
@@ -60,6 +90,51 @@ class AggregatesController < ApplicationController
         file= {:path=>path, :name=>File.basename(path), :type=>File.extname(path)}
         @files.push(file)
       end
+    end
+  end
+
+  def bulkLoad
+    @files = []
+    @folders = []
+    @path = {:full_path=>params[:path], :relative_path => File.basename(params[:path]), :path_array=>params[:path].split("/")}
+    if(params[:path] == "home")
+      home_path = Dir.home
+      @path = {:full_path=>home_path , :relative_path=>home_path, :path_array=>home_path.split("/")}
+      @combo = Dir.glob(File.join(home_path,"/*"))
+    else
+      @back=File.dirname(params[:path])
+      @combo = Dir.glob(File.join(params[:path],"/*"))
+    end
+    #Getting all the files in this directory
+    @combo.each do |path|
+      if(!Dir.exists?(path))
+        file= {:path=>path, :name=>File.basename(path), :type=>File.extname(path)}
+        @files.push(file)
+      end
+    end
+
+    @files.each do |file|
+      fileToAdd = Aggregate.new
+      fileToAdd.file_name = file[:name]
+      fileToAdd.file = file[:path]
+      fileToAdd.file_type = file[:type]
+      fileToAdd.save
+    end
+    select = "select aggregates.*"
+    from = " FROM aggregates"
+    where = " WHERE aggregates.id NOT IN"
+    internal_select = " (select distinct aggregates.id"
+    internal_from=" FROM aggregates, folders"
+    internal_where=" WHERE folders.content_id=aggregates.id)"
+    sql = select+from+where+internal_select+internal_from+internal_where
+    @aggregates = Aggregate.find_by_sql(sql)
+    where=" WHERE aggregates.file_type = 'folder' AND aggregates.id NOT IN"
+    sql = select+from+where+internal_select+internal_from+internal_where
+    @folders = Aggregate.find_by_sql(sql)
+    @folders = @folders.map {|folder| [folder.file_name]}
+    respond_to do |format|
+      #Render the index View
+      format.html { render :index }
     end
   end
 
@@ -169,7 +244,6 @@ class AggregatesController < ApplicationController
       format.html { render :index }
     end
 
-
   end
 
   def openFolder
@@ -202,13 +276,16 @@ class AggregatesController < ApplicationController
     #Grab all the search params
     name = params['name']
     path=params['path']
-    type=params['type']
+    type=params['filetype']
+    aggType = params['type']
+    type = type.split(',')
     categories = params['categories']
     categories = categories.split(',')
     subcategories = params['Sub categories']
     subcategories = subcategories.split(',')
     categoryQueryArray=""
     subcategoryQueryArray=""
+    typeQueryArray=""
 
     #Construct the categories Query
     categories.each do |category|
@@ -220,9 +297,15 @@ class AggregatesController < ApplicationController
       subcategoryQueryArray+="subcategories.name LIKE '%"+subcategory+"%' OR "
     end
 
+    #Construct the Subcategories Query
+    type.each do |aType|
+      typeQueryArray+="aggregates.file_type LIKE '%"+aType+"%' OR "
+    end
+
     #Remove the extra OR at the end of the String array
     categoryQueryArray = categoryQueryArray.chomp(" OR ")
     subcategoryQueryArray = subcategoryQueryArray.chomp(" OR ")
+    typeQueryArray = typeQueryArray.chomp(" OR ")
 
     #Select statement for the query
     select = "select distinct aggregates.*"
@@ -270,15 +353,19 @@ class AggregatesController < ApplicationController
     #Use the SQL Query to find all relevant aggregates for the index to load
     @folders = Aggregate.find_by_sql(sql)
     @folders = @folders.map {|folder| [folder.file_name]}
-    where = where.chomp(" AND aggregates.file_type == 'folder'")
+    where = where.chomp(" AND aggregates.file_type = 'folder'")
 
     #Check the type requested by the user
-    if type == "folder"
+    if aggType == "folder"
       where+=" AND aggregates.file_type == 'folder'"
 
-    elsif type == "file"
+    elsif aggType == "file"
       where+=" AND aggregates.file_type != 'folder'"
     end
+    if(type.count != 0)
+      where+=" AND ("+ typeQueryArray+")"
+    end
+
 
 
     #Append the sql query together

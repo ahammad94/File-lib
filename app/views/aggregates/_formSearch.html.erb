@@ -28,6 +28,14 @@
               </div>
               <div class="row">
                 <div class="col-sm-3">
+                  <label for="name">Type</label>
+                </div>
+                <div class="col-sm-3">
+                  <input type="text" name="filetype" placeholder="Enter types separated by commas" style="width: 100%">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3">
                   <label for="categories">Sub Categories</label>
                 </div>
                 <div class="col-sm-9">
@@ -44,22 +52,6 @@
               </div>
               <div class="row">
                 <div class="col-sm-3">
-                  <label for="dateCreated">Date Created After</label>
-                </div>
-                <div class="col-sm-9">
-                  <input type="date" name="dateCreated">
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-3">
-                  <label for="dateModified">Modified After</label>
-                </div>
-                <div class="col-sm-9">
-                  <input type="date" name="dateModified">
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-3">
                   <label for="dateModified">State</label>
                 </div>
                 <div class="col-sm-3">
@@ -69,12 +61,7 @@
                     <option value="folder">folder</option>
                   </select>
                 </div>
-                <div class="col-sm-3">
-                  <select name="stack">
-                    <option value="inside">Inside a folder</option>
-                    <option value="notInside">Not inside a folder</option>
-                  </select>
-                </div>
+
               </div>
               <div class="actions">
                 <%= f.submit "Search"%>

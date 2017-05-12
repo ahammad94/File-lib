@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "aggregates/bulkload", to:"aggregates#bulkLoad"
   get "aggregates/addFileToFolder", to:"aggregates#addFileToFolder"
   get "aggregates/openFolder", to:"aggregates#openFolder"
   get "aggregates/newOnline", to: "aggregates#newOnline"

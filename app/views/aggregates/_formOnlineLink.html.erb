@@ -18,26 +18,10 @@
                 <%= f.label 'URL'%>
               </div>
               <div class="col-sm-11">
-                 <%= f.text_field :file%>
-              </div>
-            </div>
-            <div class="row" style="margin-top:2%">
-              <div class="col-sm-1">
-                <%= f.label :file_name %>
-              </div>
-              <div class="col-sm-11">
-                <%= f.text_field :file_name %>
+                <input type="text" name="file" placeholder="Enter URL">
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-sm-1">
-                <%= f.label :file_type, :hidden=>:hidden%>
-              </div>
-              <div class="col-sm-11">
-                <%= f.text_field :file_type, :style=>" background-color:grey" ,:hidden=>:hidden%>
-              </div>
-            </div>
             <div class="row">
               <div class="col-sm-12">
                 <%= f.submit %>

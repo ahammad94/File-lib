@@ -126,7 +126,7 @@
                               </td>
                               <td><span class="badge" style="background-color: lightseagreen"><%= aggregate.file_type %></span></td>
                                 <%
-                                if( aggregate.file_type != 'folder' )
+                                if aggregate.file_type != 'folder' && aggregate.file_type!='webpage'
                                   tempArray = aggregate.file.split("/")
                                   folderPath = tempArray[0..tempArray.size()-2].join("/")
                                   file=tempArray[tempArray.size()-1]
@@ -141,9 +141,13 @@
                                     <%end%>
                                     <span class="badge" style="background-color: grey"><%=file%></span>
                                   </td>
+                               <%elsif aggregate.file_type == 'webpage'%>
+                                      <td>
+                                        <a href="<%=aggregate.file%>" class="badge" style="background-color: dodgerblue" target="_blank"><%= aggregate.file%></a>
+                                      </td>
                                <%else%>
                                   <td></td>
-                                <%end%>
+                                  <%end%>
                                 <td>
                                     <span class="badge" style="background-color: seagreen"><%=aggregate.categories.size%> categories</span>
                                     <span class="badge" style="background-color: mediumseagreen"><%=aggregate.subcategories.size%> Subcategories</span>
