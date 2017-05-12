@@ -15,8 +15,22 @@ class AggregatesController < ApplicationController
     end
     
     @categories = Category.all
-    @aggregates = Aggregate.order('LOWER('+ @orderby + ')')
-    
+    #Select statement for the query
+    select = "select aggregates.*"
+    from = " FROM aggregates"
+    where = " WHERE aggregates.id NOT IN"
+    internal_select = " (select distinct aggregates.id"
+    internal_from=" FROM aggregates, folders"
+    internal_where=" WHERE folders.content_id=aggregates.id ORDER BY "+@orderby+")"
+    sql = select+from+where+internal_select+internal_from+internal_where
+    @aggregates = Aggregate.find_by_sql(sql)
+    where=" WHERE aggregates.file_type = 'folder' AND aggregates.id NOT IN"
+    sql = select+from+where+internal_select+internal_from+internal_where
+    @folders = Aggregate.find_by_sql(sql)
+    @folders = @folders.map {|folder| [folder.file_name]}
+
+
+
   end
 
   def parse_online
@@ -121,11 +135,60 @@ class AggregatesController < ApplicationController
     end
   end
 
-  def openFolder
-    @aggregates = Aggregate.all
+  def addFileToFolder
+    foldername = params['search']['folder_name']
+    fileID = params['file_id']
+    folder = Aggregate.find_by('file_name': foldername)
+    file = Aggregate.find(fileID)
+    oldFolderId = params['current_folder']
+    if oldFolderId!=nil
+      # First delete file from other folders before inserting it into another folder
+      delete = "DELETE FROM folders "
+      where = " WHERE folders.folder_id = "+oldFolderId.to_s+" AND folders.content_id = "+file.id.to_s
+      sql = delete+where
+      ActiveRecord::Base.connection.execute(sql)
+    end
+
+
+    sql = "Insert into folders (folder_id, content_id) values("+folder.id.to_s+", "+file.id.to_s+")"
+    ActiveRecord::Base.connection.execute(sql)
+    #Select statement for the query
+    select = "select distinct aggregates.*"
+    from=" FROM aggregates, folders"
+    where=" WHERE folders.folder_id="+folder.id.to_s
+    where+=" AND folders.content_id=aggregates.id"
+    sql = select+from+where
+    @aggregates = Aggregate.find_by_sql(sql)
+    where+=" AND aggregates.file_type = 'folder'"
+    sql = select+from+where
+    @folders = Aggregate.find_by_sql(sql)
+    @folders = @folders.map {|folder| [folder.file_name]}
+    @containing_folderId = folder.id
     respond_to do |format|
       #Render the index View
       format.html { render :index }
+    end
+
+
+  end
+
+  def openFolder
+    folderId = params['folder_id']
+    #Select statement for the query
+    select = "select distinct aggregates.*"
+    from=" FROM aggregates, folders"
+    where=" WHERE folders.folder_id="+folderId
+    where+=" AND folders.content_id=aggregates.id"
+    sql = select+from+where
+    @aggregates = Aggregate.find_by_sql(sql)
+    where+=" AND aggregates.file_type = 'folder'"
+    sql = select+from+where
+    @folders = Aggregate.find_by_sql(sql)
+    @folders = @folders.map {|folder| [folder.file_name]}
+    @containing_folderId = folderId
+    respond_to do |format|
+        #Render the index View
+        format.html { render :index }
     end
   end
 
@@ -199,9 +262,20 @@ class AggregatesController < ApplicationController
       end
     end
 
+    #Append the sql query together
+    where+=" AND aggregates.file_type = 'folder'"
+    sql = select+from+where
+
+
+    #Use the SQL Query to find all relevant aggregates for the index to load
+    @folders = Aggregate.find_by_sql(sql)
+    @folders = @folders.map {|folder| [folder.file_name]}
+    where = where.chomp(" AND aggregates.file_type == 'folder'")
+
     #Check the type requested by the user
     if type == "folder"
       where+=" AND aggregates.file_type == 'folder'"
+
     elsif type == "file"
       where+=" AND aggregates.file_type != 'folder'"
     end
@@ -209,7 +283,6 @@ class AggregatesController < ApplicationController
 
     #Append the sql query together
     sql = select+from+where
-    puts sql
 
 
     #Use the SQL Query to find all relevant aggregates for the index to load

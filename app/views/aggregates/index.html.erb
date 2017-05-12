@@ -35,6 +35,8 @@
                            :action=>:index, :controller=>:aggregates, :orderby=>"file_name"%></th>
                           <%end%>
 
+                          <th>Add to Folder</th>
+
                           <%if @orderby == "file_type"%>
                               <th class="text-info">File Type</th>
                           <%else%>
@@ -84,7 +86,7 @@
                               <td>
                                 <%= link_to aggregate.file_name, aggregate, :class=>"btn btn-xs btn-default", :style=>"margin:1%" %><br />
                                 <% if aggregate.file_type == 'folder' %>
-                                  <%= link_to edit_aggregate_path(aggregate), :class=>"btn btn-xs btn-success" do %>
+                                  <%= link_to url_for(:action=>:openFolder, :controller=>:aggregates, :folder_id=>aggregate.id), :class=>"btn btn-xs btn-success" do %>
                                       <span>Open Folder</span>
                                   <%end%>
                                 <%end%>
@@ -94,6 +96,33 @@
                                 <%= link_to aggregate, method: :delete, :class=>"btn btn-xs btn-danger" ,data: { confirm: 'Are you sure?' } do %>
                                     <span class="glyphicon glyphicon-trash"></span>
                                 <%end%>
+                              </td>
+                              <td>
+
+                                    <%= form_for :search, :url => url_for(:action=>'addFileToFolder', :controller=>'aggregates', :file_id=>aggregate.id), :method=>:get do |f| %>
+                                        <div class="row">
+                                          <div class="col-sm-12">
+                                            <%
+
+                                              if @folders != []
+                                            %>
+
+                                            <%= f.select :folder_name, options_for_select(@folders), :class => 'genForm_dropBox', :name=> 'folder_name' %>
+                                                <input type="text" name="file_id" hidden value="<%= aggregate.id %>" style="width: 100%">
+                                                <%if @containing_folderId != nil   %>
+                                                  <input type="text" name="current_folder" hidden value="<%= @containing_folderId %>" style="width: 100%">
+                                                <%end%>
+                                          </div>
+                                        </div>
+                                        <div class="actions">
+                                          <%= f.submit "Add"%>
+                                        </div>
+                                                <%
+                                                  end
+                                                %>
+
+                                    <%end%>
+
                               </td>
                               <td><span class="badge" style="background-color: lightseagreen"><%= aggregate.file_type %></span></td>
                                 <%
